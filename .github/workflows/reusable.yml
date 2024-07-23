@@ -1,31 +1,26 @@
-name: Reusable Workflow
-
+name: Shared CI Workflow
 on:
-  workflow_call:
-    inputs:
-      name:
-        description: "Input Description"
-        type: string
-        default: "Ali"
-        required: false
-    secrets:
-      access-token:
-        description: "Secret description"
-        required: true
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  checkout:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: ls -a
 
-  log-context-and-inputs:
-    runs-on: ubuntu-latest
     steps:
-      - name: Display Github Context
-        run: echo '${{ toJSON(github)}}'
-      - name: Display name input
-        run: echo ${{ inputs.name }}
-      - name: Display access-token secret
-        run: echo ${{secrets.access-token}}
+      - name: Checkout respository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Test
+        run: npm test
