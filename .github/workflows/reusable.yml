@@ -26,6 +26,6 @@ jobs:
       - name: Display Github Context
         run: echo '${{ toJSON(github)}}'
       - name: Display name input
-        run: echo '{{ name.input }}'
+        run: echo ${{ inputs.name }}
       - name: Display access-token secret
         run: echo ${{secrets.access-token}}
